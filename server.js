@@ -1,6 +1,7 @@
 const http = require('http');
 const mysql = require('mysql2');
-const dashboard = require('./pages/dashboard/route')
+const dashboard = require('./routes/dashboard');
+const product = require('./routes/product');
 
 const db = mysql.createPool({
     host : '127.0.0.1',
@@ -39,6 +40,9 @@ const server = http.createServer((req, res) => {
     }
     else if(req.url === '/dashboard' && req.method === 'GET'){
         dashboard(req, res);
+    }
+    else if(req.url === '/product' && req.method === 'GET'){
+        product(req, res);
     }
     else{
         res.writeHead(404, {'Content-Type' : 'text/plain'})
