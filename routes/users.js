@@ -18,7 +18,16 @@ module.exports = ((req, res) => {
                 res.writeHead(500, {"Content-Type" : "text/html"});
                 res.end("Internal Server Error");
             }
-            const users = result.map(user => `<li>${capitalize(user.name)} ${user.email}</li>`).join(''); // Iterate the result of sql query and assign it to html list
+            const users = result.map(user =>
+                `<tr>
+                    <td>
+                        ${capitalize(user.name)}
+                    </td>
+                    <td>
+                    ${user.email}
+                    </td>
+                </tr>`)
+                .join(''); // Iterate the result of sql query and assign it to html list
             const replacedUsers = data.replace('{{users}}', users); // replacing {{users}} from the html page to the list of users
 
             res.writeHead(200, {'Content-Type' : 'text/html'});

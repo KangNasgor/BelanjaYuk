@@ -1,8 +1,12 @@
+// Modules
 const http = require('http');
 const mysql = require('mysql2');
+// Pages
 const dashboard = require('./routes/dashboard');
 const product = require('./routes/product');
 const users = require('./routes/users');
+const error = require('./routes/error');
+// Database
 const db = require('./db');
 
 db.getConnection((err, connection) => {
@@ -10,7 +14,6 @@ db.getConnection((err, connection) => {
         console.error("Internal Database Error");
     }
     else{
-        console.log("Success!");
         connection.release();
     }
 });
@@ -26,8 +29,7 @@ const server = http.createServer((req, res) => {
         product(req, res);
     }
     else{
-        res.writeHead(404, {'Content-Type' : 'text/plain'})
-        res.end('Not Found');
+        error(req, res);
     }
 })
 
