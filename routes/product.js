@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = ((req, res) => {
     const pathname = path.join(__dirname, '../pages/product', 'index.html');
-    fs.readFile(pathname, (err, data) => {
+    fs.readFile(pathname, 'utf-8', (err, data) => {
         if(err){
             res.writeHead(500, {'Content-Type' : 'text/plain'});
             res.end('Internal server error');

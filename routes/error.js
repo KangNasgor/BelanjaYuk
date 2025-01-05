@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (req, res) => {
+module.exports = ((req, res) => {
     const pathName = path.join(__dirname, '../pages/error', 'index.html');
     fs.readFile(pathName, 'utf-8', (err, data) => {
         if(err){
@@ -11,4 +11,4 @@ module.exports = (req, res) => {
         res.writeHead(200, {'Content-Type' : 'text/html'});
         res.end(data);
     })
-}
+});
