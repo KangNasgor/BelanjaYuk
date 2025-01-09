@@ -21,10 +21,28 @@ db.getConnection((err, connection) => {
 });
 
 const server = http.createServer((req, res) => {
-    const pathname = path.join(__dirname, 'pages/dashboard', req.url);
+    const pathfolder = [
+        'dashboard',
+        'product',
+        'users',
+        'error',
+    ];
+    let pathname;
+    const basefolder = path.join(__dirname, 'pages');
+    const foldername = req.url.split('/')[1] || 'dashboard';
+    const filename = req.url.split('/')[2] || 'index.html';
+    for(const folder of pathfolder){
+        if(folder === foldername){
+            const pathstring = path.join(basefolder, folder, filename);
+            if(fs.existsSync(pathstring) && fs.lstatSync(pathstring).isFile()){
+                pathname = pathstring;
+            }
+            break;
+        }   
+    }
 
     if (fs.existsSync(pathname) && fs.lstatSync(pathname).isFile()) { // if the path exists and if it's a file (not a folder)
-        const ext = path.extname(req.url);
+        const ext = path.extname(pathname);
         let contentType = 'text/plain';
         switch (ext) { // determining the code type
             case '.html':
@@ -37,8 +55,8 @@ const server = http.createServer((req, res) => {
                 contentType = 'application/javascript';
                 break;
         }
-        res.writeHead(200, { 'Content-Type': contentType });
-        fs.createReadStream(pathname).pipe(res); // reading the javascript file as a stream of data instead as a file
+        res.writeHead(200, { 'Content-Type' : contentType });
+        fs.createReadStream(pathname).pipe(res); // reading the file as a stream of data instead of as a file
         return;
     }
     if(req.url === "/" && req.method === 'GET'){
